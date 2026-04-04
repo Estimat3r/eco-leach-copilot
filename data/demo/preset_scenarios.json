@@ -1,0 +1,52 @@
+{
+  "scenarios": [
+    {
+      "id": "high_recovery_high_carbon",
+      "name_ko": "고회수율 고탄소 조건",
+      "description_ko": "높은 온도와 시약 농도로 최대 회수율을 추구하지만 탄소 부담이 큰 조건",
+      "condition": {
+        "temp_C": 75,
+        "time_min": 120,
+        "h2so4_M": 1.0,
+        "h2o2_M": 1.47,
+        "pulp_density_gL": 100
+      }
+    },
+    {
+      "id": "medium_recovery_low_carbon",
+      "name_ko": "중간 회수율 저탄소 조건",
+      "description_ko": "적절한 회수율을 유지하면서 자원 투입을 최소화하는 균형 조건",
+      "condition": {
+        "temp_C": 50,
+        "time_min": 60,
+        "h2so4_M": 1.06,
+        "h2o2_M": 0.735,
+        "pulp_density_gL": 20
+      }
+    },
+    {
+      "id": "low_temp_long_time",
+      "name_ko": "저온 장시간 조건",
+      "description_ko": "낮은 온도에서 긴 반응 시간으로 에너지를 절약하는 조건",
+      "condition": {
+        "temp_C": 26,
+        "time_min": 270,
+        "h2so4_M": 1.15,
+        "h2o2_M": 0.333,
+        "pulp_density_gL": 124
+      }
+    },
+    {
+      "id": "sparse_region_warning",
+      "name_ko": "데이터 희소 구간 경고 조건",
+      "description_ko": "데이터가 부족한 영역에서의 예측 불확실성을 보여주는 조건",
+      "condition": {
+        "temp_C": 85,
+        "time_min": 350,
+        "h2so4_M": 1.8,
+        "h2o2_M": 1.9,
+        "pulp_density_gL": 300
+      }
+    }
+  ]
+}
