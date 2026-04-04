@@ -3,7 +3,6 @@
 import streamlit as st
 
 from src.models import PredictionResult
-from src.ui.warnings import render_confidence_badge, render_warnings
 
 
 METAL_LABELS = {
@@ -21,13 +20,6 @@ def render_single_result(
 ) -> None:
     """단일 조건 결과 화면 렌더링."""
     st.header("📊 시뮬레이션 결과")
-
-    # 경고 메시지
-    if prediction.warnings:
-        render_warnings(prediction.warnings)
-
-    # 신뢰도 배지
-    render_confidence_badge(prediction.confidence_tier)
 
     st.divider()
 

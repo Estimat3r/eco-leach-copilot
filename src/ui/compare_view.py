@@ -3,7 +3,6 @@
 import streamlit as st
 
 from src.models import PredictionResult
-from src.ui.warnings import render_confidence_badge, render_warnings
 from src.visualization.comparison_plot import (
     create_carbon_comparison_bar,
     create_comparison_bar_chart,
@@ -27,20 +26,6 @@ def render_compare_result(
 ) -> None:
     """비교 결과 화면 렌더링."""
     st.header("⚖️ 조건 비교 결과")
-
-    # 경고 표시
-    all_warnings = result_a.warnings + result_b.warnings
-    if all_warnings:
-        render_warnings(list(set(all_warnings)))
-
-    # 신뢰도 배지 (양쪽)
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("조건 A")
-        render_confidence_badge(result_a.confidence_tier)
-    with col2:
-        st.subheader("조건 B")
-        render_confidence_badge(result_b.confidence_tier)
 
     st.divider()
 
