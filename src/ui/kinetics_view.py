@@ -3,7 +3,7 @@
 import streamlit as st
 import pandas as pd
 
-from src.sustainability.carbon_proxy import compute_carbon_proxy
+from src.sustainability.carbon_emission import CarbonBreakdown
 from src.visualization.kinetics_plot import create_kinetics_line_plot
 
 
@@ -11,37 +11,36 @@ def render_kinetics_result(
     kinetics_data: pd.DataFrame,
     saturation_note: str | None,
     condition: dict[str, float],
-    carbon_normalized_start: float,
-    carbon_normalized_end: float,
+    carbon_start: CarbonBreakdown,
+    carbon_end: CarbonBreakdown,
 ) -> None:
     """Kinetics 결과 화면 렌더링."""
     st.header("⏱️ Kinetics 분석")
 
-    # Line plot
     fig = create_kinetics_line_plot(kinetics_data)
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
-    # 탄소 부담 변화 안내
-    st.subheader("🌱 반응 시간에 따른 탄소 부담 변화")
+    # 반응 시간에 따른 탄소 배출 변화
+    st.subheader("🏭 반응 시간에 따른 탄소 배출 변화")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("시작 (1분)", f"{carbon_normalized_start:.3f}")
+        st.metric("1분 시점", f"{carbon_start.total_kg:.4f} kg CO₂")
     with col2:
-        st.metric("종료 (360분)", f"{carbon_normalized_end:.3f}")
+        st.metric("360분 시점", f"{carbon_end.total_kg:.4f} kg CO₂")
     with col3:
-        delta = carbon_normalized_end - carbon_normalized_start
-        st.metric("증가량", f"+{delta:.3f}")
+        delta = carbon_end.total_kg - carbon_start.total_kg
+        st.metric("증가량", f"+{delta:.4f} kg CO₂")
 
     st.caption(
-        "반응 시간이 길어질수록 탄소 부담이 증가합니다. "
-        "포화 구간 이후의 추가 시간은 자원 효율을 낮출 수 있습니다."
+        "반응 시간이 길어질수록 열 유지 에너지로 인해 탄소 배출이 증가합니다. "
+        "포화 구간 이후의 추가 시간은 회수율 개선 없이 배출만 늘릴 수 있습니다."
     )
 
     st.divider()
 
-    # 포화 구간 해석
+    # 포화 구간 분석
     if saturation_note:
         st.subheader("📈 포화 구간 분석")
         st.info(saturation_note)
