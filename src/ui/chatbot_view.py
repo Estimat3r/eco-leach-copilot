@@ -4,6 +4,36 @@ from __future__ import annotations
 import streamlit as st
 import pandas as pd
 
+# CSS 스타일 추가
+st.markdown("""
+<style>
+/* 예시 질문 버튼 스타일 - 둥근 캡슐형 */
+div[data-testid="stVerticalBlock"] button[key^="example_"] {
+    background: white !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 50px !important;
+    padding: 1.2rem 1.5rem !important;
+    height: auto !important;
+    min-height: 4rem !important;
+    text-align: left !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    line-height: 1.5 !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    transition: all 0.3s ease !important;
+}
+
+div[data-testid="stVerticalBlock"] button[key^="example_"]:hover {
+    background: #f5f5f5 !important;
+    border-color: #bdbdbd !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 from src.chatbot.engine import build_context_message, chat, get_client
 from src.engine.predictor import predict
 from src.engine.kinetics import compute_kinetics, detect_saturation
@@ -90,8 +120,12 @@ def render_chatbot(
     last_result: dict | None = None,
 ) -> None:
     """AI 챗봇 화면 렌더링."""
-    st.header("🤖 AI 공정 어시스턴트")
-    st.caption("침출 공정 최적화, 탄소 감축, 그래프 생성 등 무엇이든 물어보세요.")
+    st.markdown("""
+<div style="text-align: center; padding: 1rem 0 0.5rem 0;">
+    <h2 style="margin: 0; color: #1565c0;">🤖 AI 공정 어시스턴트</h2>
+    <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 1rem;">침출 공정 최적화, 탄소 감축, 그래프 생성 등 무엇이든 물어보세요</p>
+</div>
+""", unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
@@ -109,11 +143,10 @@ def render_chatbot(
 
     # 예시 질문
     st.markdown("**💡 예시 질문**")
-    cols = st.columns(2)
+    
     for i, q in enumerate(EXAMPLE_QUESTIONS):
-        with cols[i % 2]:
-            if st.button(q, key=f"example_{i}", use_container_width=True):
-                st.session_state.pending_question = q
+        if st.button(q, key=f"example_{i}", use_container_width=True):
+            st.session_state.pending_question = q
 
     st.divider()
 
