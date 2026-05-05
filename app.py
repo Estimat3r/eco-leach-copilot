@@ -138,7 +138,7 @@ def main():
 
     with tab_chat:
         try:
-            api_key = st.secrets["GEMINI_API_KEY"]
+            api_key = st.secrets["OPENAI_API_KEY"]
         except Exception:
             st.error("❌ Gemini API 키가 설정되지 않았습니다. .streamlit/secrets.toml을 확인하세요.")
             st.stop()

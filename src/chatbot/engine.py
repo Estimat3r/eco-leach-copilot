@@ -1,11 +1,11 @@
-"""Gemini 기반 AI 챗봇 엔진 — 침출 공정 전문 어시스턴트."""
+"""OpenAI 기반 AI 챗봇 엔진 — 침출 공정 전문 어시스턴트."""
 
 from __future__ import annotations
-from google import genai
-from google.genai import types
+from openai import OpenAI
 
-SYSTEM_PROMPT = """
-당신은 NCM811 폐배터리 침출 공정 전문 AI 어시스턴트입니다.
+MODEL = "gpt-4o-mini"  # 가성비 최적 모델
+
+SYSTEM_PROMPT = """당신은 NCM811 폐배터리 침출 공정 전문 AI 어시스턴트입니다.
 사용자는 폐배터리 재활용 현장 엔지니어 또는 연구자입니다.
 
 당신의 역할:
@@ -27,33 +27,28 @@ SYSTEM_PROMPT = """
 - 구체적인 수치와 근거를 제시
 - 회수율과 탄소 배출을 항상 함께 고려
 - 불확실한 내용은 솔직하게 인정
-- 간결하고 실용적으로 답변 (3~5문장 권장)
-"""
+- 간결하고 실용적으로 답변 (3~5문장 권장)"""
 
 
-def get_client(api_key: str) -> genai.Client:
-    """Gemini 클라이언트 초기화."""
-    return genai.Client(api_key=api_key)
+def get_client(api_key: str) -> OpenAI:
+    """OpenAI 클라이언트 초기화."""
+    return OpenAI(api_key=api_key)
 
 
-def chat(client: genai.Client, history: list[dict], user_message: str) -> str:
-    """Gemini에 메시지 전송 후 응답 반환."""
-    # history를 genai Content 형식으로 변환
-    contents = []
+def chat(client: OpenAI, history: list[dict], user_message: str) -> str:
+    """OpenAI에 메시지 전송 후 응답 반환."""
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     for msg in history:
-        role = "user" if msg["role"] == "user" else "model"
-        contents.append(types.Content(role=role, parts=[types.Part(text=msg["content"])]))
-    contents.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
+        messages.append({"role": msg["role"], "content": msg["content"]})
+    messages.append({"role": "user", "content": user_message})
 
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-lite",
-        contents=contents,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT,
-            temperature=0.7,
-        ),
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        temperature=0.7,
+        max_tokens=800,
     )
-    return response.text
+    return response.choices[0].message.content
 
 
 def build_context_message(
