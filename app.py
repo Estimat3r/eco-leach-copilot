@@ -145,6 +145,7 @@ def main():
 
         render_chatbot(
             api_key=api_key,
+            dataset=dataset,
             condition=st.session_state.get("last_condition"),
             last_result=st.session_state.get("last_result"),
         )
