@@ -22,7 +22,6 @@ def render_single_result(
 ) -> None:
     """단일 조건 결과 화면 렌더링."""
     st.header("📊 시뮬레이션 결과")
-    st.divider()
 
     # 금속별 침출률
     st.subheader("금속별 침출률")
@@ -32,7 +31,7 @@ def render_single_result(
         with cols[i]:
             st.metric(label=f"{icon} {name}", value=f"{value:.1f}%")
 
-    st.divider()
+    st.markdown("---")
 
     # 탄소 배출량 (kg CO₂)
     st.subheader("🏭 탄소 배출량 분석")
@@ -41,8 +40,6 @@ def render_single_result(
     with col1:
         st.metric("총 CO₂ 배출량", f"{carbon.total_kg:.4f} kg CO₂")
         st.caption("1L 반응 용액 기준 (batch)")
-
-        # 분해 테이블
         st.markdown("**배출원별 분해**")
         st.dataframe({
             "배출원": ["🔥 가열 에너지", "⚗️ H₂SO₄ 생산", "🧪 H₂O₂ 생산"],
@@ -62,14 +59,14 @@ def render_single_result(
         fig = create_carbon_breakdown_pie(carbon)
         st.plotly_chart(fig, use_container_width=True)
 
-    st.divider()
+    st.markdown("---")
 
     # 탄소 감축 추천
     st.subheader("💡 탄소 감축 추천")
     for rec in recommendations:
         st.info(rec)
 
-    st.divider()
+    st.markdown("---")
 
     # 해석 텍스트
     _render_interpretation(prediction, carbon)

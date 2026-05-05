@@ -56,7 +56,7 @@ def render_sidebar() -> tuple[dict, str, dict | None]:
         - condition_b: compare 모드일 때 조건 B (그 외 None)
     """
     with st.sidebar:
-        st.title("🔬 Eco-Leach Copilot")
+        st.title("🔋 에코리치")
         st.caption("NCM811 침출 공정 시뮬레이터")
         st.divider()
 
