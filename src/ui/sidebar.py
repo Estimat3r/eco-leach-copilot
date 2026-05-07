@@ -19,6 +19,7 @@ def _load_presets() -> list[dict]:
 def _render_condition_sliders(
     prefix: str = "",
     defaults: dict | None = None,
+    mode: str = "single",
 ) -> dict[str, float]:
     """공정 조건 슬라이더 렌더링."""
     d = defaults or {}
@@ -27,10 +28,19 @@ def _render_condition_sliders(
             f"{prefix}온도 (°C)", 10, 90,
             int(d.get("temp_C", 60)), key=f"{prefix}temp_C",
         ),
-        "time_min": st.slider(
+    }
+    
+    # Kinetics 모드가 아닐 때만 반응시간 슬라이더 표시
+    if mode != "kinetics":
+        condition["time_min"] = st.slider(
             f"{prefix}반응 시간 (min)", 1, 360,
             int(d.get("time_min", 120)), key=f"{prefix}time_min",
-        ),
+        )
+    else:
+        # Kinetics 모드에서는 기본값 사용 (실제로는 1~360분 전체 범위 분석)
+        condition["time_min"] = 120.0  # 더미 값 (사용되지 않음)
+    
+    condition.update({
         "h2so4_M": st.slider(
             f"{prefix}H₂SO₄ 농도 (M)", 0.3, 2.0,
             float(d.get("h2so4_M", 1.0)), step=0.01, key=f"{prefix}h2so4_M",
@@ -43,7 +53,7 @@ def _render_condition_sliders(
             f"{prefix}고액비 (g/L)", 20, 333,
             int(d.get("pulp_density_gL", 100)), key=f"{prefix}pulp_density_gL",
         ),
-    }
+    })
     return {k: float(v) for k, v in condition.items()}
 
 
@@ -91,12 +101,14 @@ def render_sidebar() -> tuple[dict, str, dict | None]:
         # 조건 입력
         if mode == "compare":
             st.subheader("조건 A")
-            condition_a = _render_condition_sliders("A_", defaults)
+            condition_a = _render_condition_sliders("A_", defaults, mode)
             st.divider()
             st.subheader("조건 B")
-            condition_b = _render_condition_sliders("B_")
+            condition_b = _render_condition_sliders("B_", None, mode)
             return condition_a, mode, condition_b
         else:
             st.subheader("공정 조건 입력")
-            condition = _render_condition_sliders("", defaults)
+            if mode == "kinetics":
+                st.caption("⏱️ 시간별 침출률 변화를 분석합니다 (1~360분)")
+            condition = _render_condition_sliders("", defaults, mode)
             return condition, mode, None
