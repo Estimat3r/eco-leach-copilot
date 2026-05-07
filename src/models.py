@@ -10,7 +10,7 @@ class ProcessCondition:
     temp_C: float          # 온도 (°C), 범위: 10~90
     time_min: float        # 반응 시간 (min), 범위: 1~360
     h2so4_M: float         # 황산 농도 (M), 범위: 0.3~2.0
-    h2o2_M: float          # H2O2 농도 (M), 범위: 0.0~1.96
+    h2o2_M: float          # H2O2 농도 (M), 범위: 0.0~2.0
     pulp_density_gL: float # 고액비 (g/L), 범위: 20~333
 
 

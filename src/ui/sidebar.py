@@ -36,7 +36,7 @@ def _render_condition_sliders(
             float(d.get("h2so4_M", 1.0)), step=0.01, key=f"{prefix}h2so4_M",
         ),
         "h2o2_M": st.slider(
-            f"{prefix}H₂O₂ 농도 (M)", 0.0, 1.96,
+            f"{prefix}H₂O₂ 농도 (M)", 0.0, 2.0,
             float(d.get("h2o2_M", 0.5)), step=0.01, key=f"{prefix}h2o2_M",
         ),
         "pulp_density_gL": st.slider(

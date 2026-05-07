@@ -5,6 +5,7 @@ import streamlit as st
 from src.models import PredictionResult
 from src.sustainability.carbon_emission import CarbonBreakdown
 from src.visualization.carbon_plot import create_carbon_breakdown_pie
+from src.ui.warnings import render_confidence_badge, render_warnings
 
 
 METAL_LABELS = {
@@ -22,6 +23,15 @@ def render_single_result(
 ) -> None:
     """단일 조건 결과 화면 렌더링."""
     st.header("📊 시뮬레이션 결과")
+
+    # 신뢰도 표시
+    render_confidence_badge(prediction.confidence_tier)
+    
+    # 경고 메시지 표시
+    if prediction.warnings:
+        render_warnings(prediction.warnings)
+    
+    st.markdown("---")
 
     # 금속별 침출률
     st.subheader("금속별 침출률")

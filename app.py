@@ -274,6 +274,9 @@ def render_simulator_page(dataset, supported_ranges):
                 st.error(f"❌ {err}")
             return
         try:
+            # 기본 조건에 대한 예측으로 신뢰도 확인
+            base_result = predict(condition_a, dataset)
+            
             kinetics_df = compute_kinetics(
                 temp_C=condition_a["temp_C"],
                 h2so4_M=condition_a["h2so4_M"],
@@ -290,7 +293,8 @@ def render_simulator_page(dataset, supported_ranges):
                 condition_a["temp_C"], 360.0,
                 condition_a["h2so4_M"], condition_a["h2o2_M"],
             )
-            render_kinetics_result(kinetics_df, saturation_note, condition_a, carbon_start, carbon_end)
+            render_kinetics_result(kinetics_df, saturation_note, condition_a, 
+                                 carbon_start, carbon_end, base_result)
             st.session_state["last_condition"] = condition_a
         except Exception as e:
             st.error(f"❌ Kinetics 분석 오류: {e}")

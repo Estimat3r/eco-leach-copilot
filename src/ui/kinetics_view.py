@@ -3,8 +3,10 @@
 import streamlit as st
 import pandas as pd
 
+from src.models import PredictionResult
 from src.sustainability.carbon_emission import CarbonBreakdown
 from src.visualization.kinetics_plot import create_kinetics_line_plot
+from src.ui.warnings import render_confidence_badge, render_warnings
 
 
 def render_kinetics_result(
@@ -13,9 +15,17 @@ def render_kinetics_result(
     condition: dict[str, float],
     carbon_start: CarbonBreakdown,
     carbon_end: CarbonBreakdown,
+    base_result: PredictionResult,
 ) -> None:
     """Kinetics 결과 화면 렌더링."""
     st.header("⏱️ Kinetics 분석")
+
+    # 신뢰도 표시
+    render_confidence_badge(base_result.confidence_tier)
+    if base_result.warnings:
+        render_warnings(base_result.warnings)
+    
+    st.markdown("---")
 
     fig = create_kinetics_line_plot(kinetics_data)
     st.plotly_chart(fig, use_container_width=True)

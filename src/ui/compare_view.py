@@ -6,6 +6,7 @@ from src.models import PredictionResult
 from src.sustainability.carbon_emission import CarbonBreakdown
 from src.visualization.comparison_plot import create_comparison_bar_chart
 from src.visualization.carbon_plot import create_carbon_comparison_grouped
+from src.ui.warnings import render_confidence_badge, render_warnings
 
 
 METAL_LABELS = {
@@ -25,6 +26,20 @@ def render_compare_result(
 ) -> None:
     """비교 결과 화면 렌더링."""
     st.header("⚖️ 조건 비교 결과")
+    
+    # 신뢰도 표시
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("**조건 A 신뢰도**")
+        render_confidence_badge(result_a.confidence_tier)
+        if result_a.warnings:
+            render_warnings(result_a.warnings)
+    with col2:
+        st.markdown("**조건 B 신뢰도**")
+        render_confidence_badge(result_b.confidence_tier)
+        if result_b.warnings:
+            render_warnings(result_b.warnings)
+    
     st.divider()
 
     # 침출률 비교 테이블

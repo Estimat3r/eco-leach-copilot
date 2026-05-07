@@ -10,7 +10,7 @@ def _make_ranges():
         "temp_C": SupportedRange(10.0, 90.0),
         "time_min": SupportedRange(1.0, 360.0),
         "h2so4_M": SupportedRange(0.3, 2.0),
-        "h2o2_M": SupportedRange(0.0, 1.96),
+        "h2o2_M": SupportedRange(0.0, 2.0),
         "pulp_density_gL": SupportedRange(20.0, 333.0),
     }
 
